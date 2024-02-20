@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # sanhaupos (sanhaupos)
 
 POS for PT Sanhau Makmur Sejahtera
@@ -31,3 +32,6 @@ quasar build
 
 ### Customize the configuration
 See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-config-js).
+=======
+# sms-frontend-erp
+>>>>>>> f2632c34a25ad4c1e88a15137886e7222d6bdfe9
