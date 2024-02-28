@@ -11,6 +11,7 @@
 /* eslint func-names: 0 */
 /* eslint global-require: 0 */
 const { configure } = require('quasar/wrappers');
+const envparser = require('./envparser');
 
 module.exports = configure((/* ctx */) => ({
   eslint: {
@@ -50,16 +51,17 @@ module.exports = configure((/* ctx */) => ({
 
     'roboto-font', // optional, you are not bound to it
     'material-icons', // optional, you are not bound to it
+    'material-icons-outlined', // optional, you are not bound to it
   ],
 
   // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#build
   build: {
     target: {
       browser: ['es2019', 'edge88', 'firefox78', 'chrome87', 'safari13.1'],
-      node: 'node20',
+      node: 'node16',
     },
 
-    vueRouterMode: 'hash', // available values: 'hash', 'history'
+    vueRouterMode: 'history', // available values: 'hash', 'history'
     // vueRouterBase,
     // vueDevtools,
     // vueOptionsAPI: false,
@@ -68,7 +70,7 @@ module.exports = configure((/* ctx */) => ({
 
     // publicPath: '/',
     // analyze: true,
-    // env: {},
+    env: envparser(),
     // rawDefine: {}
     // ignorePublicFolder: true,
     // minify: false,
@@ -86,14 +88,14 @@ module.exports = configure((/* ctx */) => ({
   // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#devServer
   devServer: {
     // https: true
-    open: true, // opens browser window automatically
+    open: false, // opens browser window automatically
   },
 
   // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#framework
   framework: {
     config: {},
 
-    // iconSet: 'material-icons', // Quasar icon set
+    iconSet: 'material-icons', // Quasar icon set
     // lang: 'en-US', // Quasar language pack
 
     // For special cases outside of where the auto-import strategy can have an impact
@@ -104,7 +106,7 @@ module.exports = configure((/* ctx */) => ({
     // directives: [],
 
     // Quasar plugins
-    plugins: [],
+    plugins: ['Notify'],
   },
 
   // animations: 'all', // --- includes all animations
@@ -131,7 +133,7 @@ module.exports = configure((/* ctx */) => ({
     // extendSSRWebserverConf (esbuildConf) {},
     // extendPackageJson (json) {},
 
-    pwa: false,
+    pwa: true,
 
     // manualStoreHydration: true,
     // manualPostHydrationTrigger: true,

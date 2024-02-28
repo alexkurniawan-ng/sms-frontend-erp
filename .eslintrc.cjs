@@ -52,12 +52,13 @@ module.exports = {
 
   // add your custom rules here
   rules: {
-    
+    'no-trailing-spaces': 'off',
     'no-param-reassign': 'off',
     'no-void': 'off',
     'no-nested-ternary': 'off',
     'max-classes-per-file': 'off',
-
+    "max-len": "off",
+    'arrow-body-style': 'off',
     'import/first': 'off',
     'import/named': 'error',
     'import/namespace': 'error',
@@ -67,9 +68,10 @@ module.exports = {
     'import/no-unresolved': 'off',
     'import/no-extraneous-dependencies': 'off',
     'import/prefer-default-export': 'off',
-    
+    'no-use-before-define': 'off',
+    // 'no-use-before-define': ['error', {'functions': false, 'classes': false}],
     'prefer-promise-reject-errors': 'off',
-
+    'vue/no-mutating-props': 'off',
     // allow debugger during development only
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
   }

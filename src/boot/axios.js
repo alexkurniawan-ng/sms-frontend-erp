@@ -1,5 +1,5 @@
-import { boot } from "quasar/wrappers";
-import axios from "axios";
+import { boot } from 'quasar/wrappers';
+import axios from 'axios';
 
 // Be careful when using SSR for cross-request state pollution
 // due to creating a Singleton instance here;
@@ -19,7 +19,7 @@ const callAPIWithAuth = function callAPIWithAuth() {
   const instance = axios.create({
     baseURL: process.env.API_BASE_URL,
     headers: {
-      Authorization: `Bearer ${window.localStorage.getItem("token")}`,
+      Authorization: `Bearer ${window.localStorage.getItem('token')}`,
     },
   });
 
