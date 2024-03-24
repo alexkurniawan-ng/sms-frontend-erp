@@ -31,7 +31,7 @@ export default defineComponent({
     function goToForm() {
       router.push({ name: 'PageInvoiceCreate' });
     }
-    
+
     return {
       router,
       goToForm,

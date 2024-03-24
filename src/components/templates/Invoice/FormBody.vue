@@ -5,99 +5,64 @@
 
         <!-- DESCRIPTION -->
         <div class="col column">
-          <div class="col row q-mt-md">
-            <div class="col column">
-              <div class="text-column">Nama Barang</div>
-              <FieldText placeholder="Ketikkan nama barang..." style="min-width: 200px" />
-            </div>
-            <div class="col-auto column q-ml-md">
-              <div class="text-column">Qty</div>
-              <div class="row">
-                <FieldText type="number" style="max-width: 100px" />
-                <FieldDropdown class="q-ml-xs" style="max-width: 80px" :value="form.unit" :options="options" />
-              </div>
-            </div>
-            <div class="col-2 column q-ml-md">
-              <div class="text-column">Harga</div>
-              <FieldText type="number" style="min-width: 200px" />
-            </div>
-            <div class="col-3 column q-ml-md">
-              <div class="text-column">Jumlah</div>
-              <FieldText type="number" :disable="true" filled style="min-width: 200px" />
-            </div>
-          </div>
-  
-          <div class="col row q-mt-md">
-            <div class="col column">
-              <div class="text-column">Nama Barang</div>
-              <FieldText placeholder="Ketikkan nama barang..." style="min-width: 200px" />
-            </div>
-            <div class="col-auto column q-ml-md">
-              <div class="text-column">Qty</div>
-              <div class="row">
-                <FieldText type="number" style="max-width: 100px" />
-                <FieldDropdown class="q-ml-xs" style="max-width: 80px" :value="form.unit" :options="options" />
-              </div>
-            </div>
-            <div class="col-2 column q-ml-md">
-              <div class="text-column">Harga</div>
-              <FieldText type="number" style="min-width: 200px" />
-            </div>
-            <div class="col-3 column q-ml-md">
-              <div class="text-column">Jumlah</div>
-              <FieldText type="number" :disable="true" filled style="min-width: 200px" />
-            </div>
+          <div v-for="index in row" :key="index">
+            <OrganismInvoiceProductUnit 
+              v-model:product="products[index - 1]" 
+              @update-qty="(value) => updateQty(value, index - 1)"
+              @update-unit="(value) => updateUnit(value, index - 1)"
+              @update-price="(value) => updatePrice(value, index - 1)"
+            />
           </div>
         </div>
       </div>
       
       <!-- TOTAL -->
-      <div class="column">
+      <div class="column" :key="form.subtotal">
         <div class="col row justify-end q-mt-md">
           <div class="col-3 column">
             <div class="text-column">Subtotal</div>
-            <FieldText type="number" :disable="true" filled style="min-width: 200px" />
+            <FieldTextNumber class="border-form" :value="form.subtotal" :disable="true" filled style="min-width: 200px" />
           </div>
         </div>
         
-        <div class="col row justify-end q-mt-md">
+        <div class="col row justify-end q-mt-md" :key="form.ppn">
           <div class="col-3 column">
             <div class="text-column">include PPn 11%</div>
-            <FieldText type="number" :disable="true" filled style="min-width: 200px" />
+            <FieldTextNumber class="border-form" :value="form.ppn" :disable="true" filled style="min-width: 200px" />
           </div>
         </div>
         
         <div class="col row justify-end q-mt-md">
           <div class="col-3 column">
             <div class="text-column">Discount</div>
-            <FieldText type="number" style="min-width: 200px" />
+            <FieldTextNumber style="min-width: 200px" :value="form.discount" />
           </div>
         </div>
         
-        <div class="col row justify-end q-mt-md">
+        <div class="col row justify-end q-mt-md" :key="form.totalInvoice">
           <div class="col-3 column">
             <div class="text-column">Total</div>
-            <FieldText type="number" :disable="true" filled style="min-width: 200px" />
+            <FieldTextNumber class="border-form" :value="form.totalInvoice" :disable="true" filled style="min-width: 200px" />
           </div>
         </div>
         
         <div class="col row justify-end q-mt-md">
           <div class="col-3 column">
             <div class="text-column">Down Payment</div>
-            <FieldText type="number" style="min-width: 200px" />
+            <FieldTextNumber :value="form.downPayment" style="min-width: 200px" />
           </div>
         </div>
         
-        <div class="col row justify-end q-mt-md">
+        <div class="col row justify-end q-mt-md" :key="form.totalPaid">
           <div class="col-3 column">
             <div class="text-column">Sisa Tagihan</div>
-            <FieldText type="number" :disable="true" filled style="min-width: 200px" />
+            <FieldTextNumber class="border-form" :value="form.totalPaid" :disable="true" filled style="min-width: 200px" />
           </div>
         </div>
         
         <div class="col row justify-end q-mt-md">
           <div class="col-3 column">
-            <q-btn label="Submit" no-caps color="blue" unelevated />
+            <q-btn label="Submit" no-caps color="blue" unelevated @click="onSubmit" />
           </div>
         </div>
       </div>
@@ -106,27 +71,105 @@
   </q-card>
 </template>
 <script>
-import { defineComponent, reactive } from 'vue';
-import FieldText from 'src/components/fields/Text.vue';
-import FieldDropdown from 'components/fields/Dropdown.vue';
+import {
+  defineComponent, reactive, ref,
+} from 'vue';
+import FieldTextNumber from 'src/components/fields/TextNumber.vue';
+import OrganismInvoiceProductUnit from 'src/components/organisms/Invoice/ProductUnit.vue';
 
 export default defineComponent({
   name: 'TemplateInvoiceFormBody',
-  components: { FieldText, FieldDropdown },
+  components: { FieldTextNumber, OrganismInvoiceProductUnit },
   setup() {
-    const options = reactive(['pcs', 'ls', 'set', 'unit']);
-
     const form = reactive({
       startDate: null,
       endDate: null,
       invoiceNumber: null,
       customer: null,
-      unit: 'pcs',
+      discount: 0,
+      subtotal: 0,
+      ppn: 0,
+      totalInvoice: 0,
+      downPayment: 0,
+      totalPaid: 0,
     });
 
+    const products = reactive([
+      {
+        name: 'apaja',
+        qty: 0,
+        unit: '',
+        unitPrice: 0,
+        totalPrice: 0,
+      },
+      {
+        name: '',
+        qty: 0,
+        unit: '',
+        unitPrice: 0,
+        totalPrice: 0,
+      },
+      {
+        name: '',
+        qty: 0,
+        unit: '',
+        unitPrice: 0,
+        totalPrice: 0,
+      },
+      {
+        name: '',
+        qty: 0,
+        unit: '',
+        unitPrice: 0,
+        totalPrice: 0,
+      },
+      {
+        name: '',
+        qty: 0,
+        unit: '',
+        unitPrice: 0,
+        totalPrice: 0,
+      },
+    ]);
+
+    const row = ref(5);
+
+    function updateQty(value, index) {
+      products[index].qty = value;
+      calculatePrice(index);
+    }
+
+    function updatePrice(value, index) {
+      products[index].unitPrice = value;
+      calculatePrice(index);
+    }
+
+    function updateUnit(value, index) {
+      products[index].unit = value;
+    }
+
+    function calculatePrice(index) {
+      products[index].totalPrice = products[index].qty * products[index].unitPrice;
+      form.subtotal = products.reduce((acc, obj) => { return acc + obj.totalPrice; }, 0);
+      form.ppn = form.subtotal * 0.11;
+      form.totalInvoice = form.subtotal + form.ppn - form.discount;
+      form.totalPaid = form.totalInvoice - form.downPayment;
+    }
+
+    function onSubmit() {
+      console.log({ products });
+      console.log({ form });
+    }
+
     return {
+      row,
       form,
-      options,
+      products,
+      updateUnit,
+      updateQty,
+      updatePrice,
+      calculatePrice,
+      onSubmit,
     };
   },
 });
@@ -144,5 +187,8 @@ export default defineComponent({
   letter-spacing: 0.005em;
   color: #2b2626;
 }
-
+.border-form {
+  min-width: 200px; 
+  border: 1px solid black;
+}
 </style>

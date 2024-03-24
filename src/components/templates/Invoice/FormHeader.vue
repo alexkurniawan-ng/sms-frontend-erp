@@ -15,7 +15,7 @@
           <div class="text-column">Nama Customer</div>
           <div class="row">
             <FieldText class="col" placeholder="Ketik nama customer..." style="min-width: 150px" />
-            <q-btn unelevated dense icon="add" color="blue" class="col-auto q-ml-sm" style="width: 40px" />
+            <q-btn unelevated dense icon="add" color="blue" class="col-auto q-ml-sm" style="width: 40px" @click="openFormCustomer" />
           </div>
           <div class="text-column" style="margin-top: 14px">No. Telp Penagihan</div>
           <FieldText placeholder="Ketikkan nomor telepon..." style="min-width: 200px" />
@@ -55,15 +55,17 @@
 
     </q-card-section>
   </q-card>
+  <DialogFormCustomer v-model="dialogCustomer" />
 </template>
 <script>
 import { defineComponent, reactive, ref } from 'vue';
 import FieldTextDate from 'src/components/fields/TextDate.vue';
 import FieldText from 'src/components/fields/Text.vue';
+import DialogFormCustomer from 'src/components/dialogs/FormCustomer.vue';
 
 export default defineComponent({
   name: 'TemplateInvoiceFormHeader',
-  components: { FieldTextDate, FieldText },
+  components: { FieldTextDate, FieldText, DialogFormCustomer },
   setup() {
     const form = reactive({
       startDate: null,
@@ -73,10 +75,17 @@ export default defineComponent({
       status: 'Semua',
     });
     const addDetail = ref(false);
+    const dialogCustomer = ref(false);
+
+    function openFormCustomer() {
+      dialogCustomer.value = true;
+    }
 
     return {
       form,
       addDetail,
+      dialogCustomer,
+      openFormCustomer,
     };
   },
 });

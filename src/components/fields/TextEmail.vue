@@ -1,9 +1,7 @@
 <template>
   <q-input
-    ref="inputTextEmail"
     outlined
     type="email"
-    :label="label"
     :rules="rules"
     :value="props.value"
     @input="onChangeInput"
@@ -12,6 +10,7 @@
     :filled="filled"
     :stack-label="stacked"
     :bg-color="filled && 'blue-1'"
+    hide-bottom-space=""
   />
 </template>
 
