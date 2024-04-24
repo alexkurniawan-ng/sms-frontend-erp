@@ -4,14 +4,14 @@
       <div class="row q-my-lg">
         <div class="col text-title">Buat Invoice</div>
       </div>
-      <TemplateInvoiceFormHeader />
-      <TemplateInvoiceFormBody />
+      <TemplateInvoiceFormHeader :customer="customer" />
+      <TemplateInvoiceFormBody :products="products" />
     </div>
   </q-page>
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent, reactive } from 'vue';
 import TemplateInvoiceFormHeader from 'src/components/templates/Invoice/FormHeader.vue';
 import TemplateInvoiceFormBody from 'src/components/templates/Invoice/FormBody.vue';
 
@@ -19,7 +19,59 @@ export default defineComponent({
   name: 'PageInvoiceCreate',
   components: { TemplateInvoiceFormHeader, TemplateInvoiceFormBody },
   setup() {
-    
+    const customer = reactive({ 
+      name: null,
+      number: null,
+      address: null,
+      reference: null,
+      deliveryContact: null,
+      deliveryNumber: null,
+      deliveryAddress: null,
+      deliveryDate: new Date(),
+    });
+
+    const products = reactive([
+      {
+        name: null,
+        qty: 0,
+        unit: null,
+        unitPrice: 0,
+        totalPrice: 0,
+      },
+      {
+        name: null,
+        qty: 0,
+        unit: null,
+        unitPrice: 0,
+        totalPrice: 0,
+      },
+      {
+        name: null,
+        qty: 0,
+        unit: null,
+        unitPrice: 0,
+        totalPrice: 0,
+      },
+      {
+        name: null,
+        qty: 0,
+        unit: null,
+        unitPrice: 0,
+        totalPrice: 0,
+      },
+      {
+        name: null,
+        qty: 0,
+        unit: null,
+        unitPrice: 0,
+        totalPrice: 0,
+      },
+    ]);
+
+    return {
+      customer,
+      products,
+    };
   },
 });
 </script>

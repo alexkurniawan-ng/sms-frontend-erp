@@ -8,6 +8,7 @@
     clear-icon="close"
     :placeholder="props.placeholder"
     :rows="props.rows"
+    :debounce="props.debounce"
   />
 </template>
 
@@ -27,6 +28,7 @@ const props = defineProps({
   value: { type: String, default: null },
   placeholder: { type: String, default: null },
   rows: { type: String, default: null },
+  debounce: { type: String, default: null },
 });
 
 const text = ref(props.value);

@@ -4,7 +4,7 @@
       <q-card-section>
         <div class="row justify-between">
           <div class="col text-title">Customer Baru</div>
-          <q-btn class="col-auto" icon="close" flat />
+          <q-btn class="col-auto" icon="close" flat @click="closeDialog" />
         </div>
 
         <div class="row justify-between q-mt-md">
@@ -22,7 +22,7 @@
         </div>
 
         <div class="row justify-between q-mt-md">
-          <div class="col-4 q-pr-md q-py-sm row justify-end text-form">Alamat Penagihan (Sesuai NPWP / KTP)</div>
+          <div class="col-4 q-pr-md q-py-sm row justify-end text-right text-form">Alamat Penagihan (Sesuai NPWP / KTP)</div>
           <div class="col-8">
             <FieldText type="textarea" rows="3" style="width: 95%"/>
           </div>
@@ -90,6 +90,11 @@ export default {
 const props = defineProps({
   value: { type: Boolean, default: null },
 });
+const emit = defineEmits(['close-dialog']);
+
+function closeDialog() {
+  emit('close-dialog', false);
+}
 </script>
 <style scoped>
 .card-container {
