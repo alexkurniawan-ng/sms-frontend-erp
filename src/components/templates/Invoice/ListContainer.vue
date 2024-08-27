@@ -26,6 +26,7 @@
       </div>
       <!-- TABLE -->
       <div class="q-py-md">
+        <!-- MAKE THIS TABLE CLICKABLE TO NAVIGATE TO OTHER PAGE -->
         <q-table
           :rows="rows"
           :columns="columns"
@@ -37,6 +38,7 @@
           :pagination="pagination"
           class="text-table"
           :loading="invoiceStore.loading"
+          @row-click="onRowClick"
         />
       </div>
     </q-card-section>
@@ -52,11 +54,13 @@ import FieldTextDate from 'src/components/fields/TextDate.vue';
 import FieldText from 'components/fields/Text.vue';
 import FieldDropdown from 'components/fields/Dropdown.vue';
 import { useInvoiceStore } from 'src/stores/invoice';
+import { useRouter } from 'vue-router';
 
 export default defineComponent({
   name: 'TemplateInvoiceListContainer',
   components: { FieldTextDate, FieldText, FieldDropdown },
   setup() {
+    const router = useRouter();
     const invoiceStore = useInvoiceStore();
     const options = reactive(['Semua', 'Lunas', 'Sebagian', 'Belum Bayar']);
     
@@ -83,6 +87,9 @@ export default defineComponent({
         format: (val) => `${val}`,
         sortable: true,
         headerStyle: 'font-weight: 600; font-size: 14px;',
+      },
+      {
+        name: 'id', required: true, 
       },
       {
         name: 'date', align: 'left', label: 'Tanggal Invoice', field: 'date', sortable: true, headerStyle: 'font-weight: 600; font-size: 14px;',
@@ -125,6 +132,7 @@ export default defineComponent({
 
     function onSuccessGetData(list) {
       rows.splice(0, rows.length, ...list.map((data) => ({
+        id: data.id,
         invoiceNumber: data.invoiceNumber,
         date: moment(new Date(data.invoiceDate)).format('DD - MM - YYYY'),
         customer: data.customer,
@@ -136,6 +144,10 @@ export default defineComponent({
 
     function capitalize(s) {
       return s && s[0].toUpperCase() + s.slice(1);
+    }
+
+    function onRowClick(evt, row) {
+      router.push({ name: 'PageInvoiceDetail', params: { slug: row.id } });
     }
 
     watch(filterData, debounce((newValue) => {
@@ -173,6 +185,7 @@ export default defineComponent({
       updateStatus,
       onSuccessGetData,
       capitalize,
+      onRowClick,
       columns,
       pagination,
       date,

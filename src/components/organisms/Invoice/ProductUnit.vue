@@ -2,18 +2,16 @@
   <div class="col row q-mt-md" :key="product.totalPrice">
     <div class="col column">
       <div class="text-column">Nama Barang</div>
-      <!-- <FieldText placeholder="Ketikkan nama barang..." style="min-width: 200px" /> -->
       <q-select class="col" style="min-width: 150px"
         use-input outlined dense flat :placeholder="props.product?.name ? '' : 'Ketik nama barang...'" 
         v-model="props.product.name" :options="productList" @input-value="searchProduct" 
         @update:model-value="updateProduct" map-options="label" :emit-value="false" clearable
-      >
-    </q-select>
+      />
     </div>
     <div class="col-auto column q-ml-md">
       <div class="text-column">Qty</div>
       <div class="row">
-        <FieldTextNumber :value="props.product?.qty" style="max-width: 100px" @update-value="updateQty" />
+        <FieldTextNumber v-model="props.product.qty" style="max-width: 100px" />
         <FieldDropdown 
           class="q-ml-xs" style="max-width: 80px" 
           :value="props.product?.unit" :options="options"
@@ -52,15 +50,33 @@ import { reactive } from 'vue';
 
 const emit = defineEmits(['update-qty', 'update-price', 'update-unit']);
 const productStore = useProductStore();
-
+const props = defineProps({
+  product: { type: Object, default: null },
+});
+const options = reactive([]);
 const productList = reactive([' ']);
+
 function updateProduct(value) {
   props.product.name = value.label;
-  // props.product.qty = value.data.productQty;
-  // props.customer.address = value.data.customerIdentityAddress;
-  // props.customer.deliveryContact = value.data.customerDeliveryContactPerson;
-  // props.customer.deliveryNumber = value.data.customerDeliveryContactNumber;
-  // props.customer.deliveryAddress = value.data.customerDeliveryAddress;
+
+  // GET UNITS 
+  productStore.getProductUnit({ id: value.data.unitId })
+    .then(onSuccessGetUnit)
+    .catch((err) => console.error(err));
+
+  // JOURNAL
+  productStore.getProductJournal({ id: value.data.productJurnalId })
+    .then(onSuccessGetProductJournal)
+    .catch((err) => console.error(err));
+
+  // GET JURNAL PRODUCT http://localhost:8000/getjurnalproduct/15857188
+  // public function getJurnalProduct(Int $productJurnalId) 
+  //   {
+  //       $product = Http::get('https://api.jurnal.id/core/api/v1/products/'.$productJurnalId, [
+  //           'apikey' => $this->apiKey,
+  //       ]);
+  //      return $product['product'];
+  //   }
 }
 function searchProduct(value) {
   if (value.length === 0) {
@@ -72,6 +88,7 @@ function searchProduct(value) {
     .catch((err) => console.error(err));
 } 
 
+// SUCCESS FETCH
 function onSuccessSearchProduct(data) {
   const newOptions = data.map((item) => ({
     label: item.productName,
@@ -81,12 +98,16 @@ function onSuccessSearchProduct(data) {
   productList.splice(0, productList.length, ...newOptions); 
 }
 
-const props = defineProps({
-  product: { type: Object, default: null },
-});
+function onSuccessGetUnit(data) {
+  options.push(data.unitName);
+  updateQty(1);
+}
 
-const options = reactive(['pcs', 'ls', 'set', 'unit', 'bh']);
+function onSuccessGetProductJournal(data) {
+  console.log('journal: ', data);
+}
 
+// UPDATE
 function updateQty(value) {
   emit('update-qty', value);
 }
@@ -98,7 +119,6 @@ function updatePrice(value) {
 function updateUnit(value) {
   emit('update-unit', value);
 }
-
 </script>
 
 <style scoped>

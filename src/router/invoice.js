@@ -12,5 +12,13 @@ export default {
       name: 'PageInvoiceCreate',
       component: () => import('pages/Invoice/Form.vue'),
     },
+    {
+      path: 'detail/:slug',
+      name: 'PageInvoiceDetail',
+      meta: {
+        back: 'PageMainInvoice',
+      },
+      component: () => import('pages/Invoice/Detail.vue'),
+    },
   ],
 };

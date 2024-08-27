@@ -72,6 +72,8 @@ module.exports = {
     // 'no-use-before-define': ['error', {'functions': false, 'classes': false}],
     'prefer-promise-reject-errors': 'off',
     'vue/no-mutating-props': 'off',
+    'vue/valid-v-model': 'off',
+    "vue/no-v-model-argument": "off",
     // allow debugger during development only
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
   }

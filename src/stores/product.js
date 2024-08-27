@@ -45,5 +45,39 @@ export const useProductStore = defineStore('product', {
       });
     },
 
+    getProductUnit({ id }) {
+      const endpoint = `/products/unit/${id}`;
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        callAPIWithAuth()
+          .get(endpoint)
+          .then((response) => {
+            this.loading = false;
+            resolve(response.data.data);
+          })
+          .catch((err) => {
+            this.loading = false;
+            reject(err);
+          });
+      });
+    },
+
+    getProductJournal({ id }) {
+      const endpoint = `/products/journal/${id}`;
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        callAPIWithAuth()
+          .get(endpoint)
+          .then((response) => {
+            this.loading = false;
+            resolve(response.data.data);
+          })
+          .catch((err) => {
+            this.loading = false;
+            reject(err);
+          });
+      });
+    },
+
   },
 });
